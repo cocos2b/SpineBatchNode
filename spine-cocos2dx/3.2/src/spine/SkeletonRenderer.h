@@ -50,8 +50,8 @@ public:
 	virtual void drawSkeleton (const cocos2d::Mat4& transform, uint32_t transformFlags);
 	virtual cocos2d::Rect getBoundingBox () const override;
     
-    //TODO:dont modify original
-    void drawSkeletonToBatch(PolygonBatch* batch);
+    // for batch
+    void batchDrawSkeleton(PolygonBatch* batch);
 
 	// --- Convenience methods for common Skeleton_* functions.
 	void updateWorldTransform ();
@@ -98,6 +98,9 @@ protected:
 	SkeletonRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 0);
 	virtual ~SkeletonRenderer ();
 	void initialize ();
+    
+    void convertToWorldCoordinates(int verticesCount);
+    void drawSkeletonToBatch(PolygonBatch* batch);
 
 	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
 	virtual cocos2d::Texture2D* getTexture (spRegionAttachment* attachment) const;
@@ -116,6 +119,7 @@ protected:
 	float _timeScale;
 	bool _debugSlots;
 	bool _debugBones;
+    bool _insideBounds;                     /// whether or not the sprite was inside bounds the previous frame
 };
 
 }

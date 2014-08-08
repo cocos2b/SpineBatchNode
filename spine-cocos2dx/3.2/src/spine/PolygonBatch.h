@@ -45,6 +45,11 @@ public:
 		cocos2d::Color4B* color);
 	void flush ();
 
+    // for auto culling
+    void setVerticesTrianglesCount(int verticesCount, int trianglesCount);
+    int getVerticesCount();
+    int getTrianglesCount();
+
 protected:
 	PolygonBatch();
 	virtual ~PolygonBatch();

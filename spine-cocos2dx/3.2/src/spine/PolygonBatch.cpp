@@ -78,8 +78,6 @@ void PolygonBatch::add (const Texture2D* addTexture,
 	}
 
 	for (int i = 0; i < addTrianglesCount; ++i, ++_trianglesCount){
-        int index = addTriangles[i] + _verticesCount;
-        log("idex:%d", index);
 		_triangles[_trianglesCount] = addTriangles[i] + _verticesCount;
     }
 
@@ -114,4 +112,18 @@ void PolygonBatch::flush () {
 	CHECK_GL_ERROR_DEBUG();
 }
 
+
+//reset index if the sprite doesnt need to be drawed.
+void PolygonBatch::setVerticesTrianglesCount(int verticesCount, int trianglesCount) {
+    _verticesCount = verticesCount;
+    _trianglesCount = trianglesCount;
+}
+
+int PolygonBatch::getVerticesCount() {
+    return _verticesCount;
+}
+
+int PolygonBatch::getTrianglesCount() {
+    return _trianglesCount;
+}
 }

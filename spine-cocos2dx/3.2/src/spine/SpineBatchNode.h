@@ -1,11 +1,26 @@
 //
 //  SpineBatchNode.h
-//  Spine
+//  Batching multi Spine sprite.
 //
 //  Created by Huang Sheng on 8/4/14.
 //
 //
-
+/**
+    usage:
+    Layer someLayer = ...
+    SpineBatchNode *spineBatch = SpineBatchNode::create();
+    someLayer->addChild(spineBatch);
+ 
+    spine::SkeletonAnimation* skeletonNode1 = SkeletonAnimation::createWithFile("someSkeleton.json", "someSkeleton.atlas", 0.6f);
+    skeletonNode1->setPosition, and other stuff.....
+    spineBatch->addChild(skeletonNode1);
+ 
+     spine::SkeletonAnimation* skeletonNode2 = SkeletonAnimation::createWithFile("someSkeleton.json", "someSkeleton.atlas", 0.6f);
+     skeletonNode2->setPosition, and other stuff.....
+     spineBatch->addChild(skeletonNode2);
+    ...........
+    // more nodes
+ */
 #ifndef __Spine__SpineBatchNode__
 #define __Spine__SpineBatchNode__
 
@@ -25,9 +40,6 @@ public:
     
 
     CREATE_FUNC (SpineBatchNode);
-    
-protected:
-    std::vector<SkeletonAnimation*> allChildren;
 };
 
 }
