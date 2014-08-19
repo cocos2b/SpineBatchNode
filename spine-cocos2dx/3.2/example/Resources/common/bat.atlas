@@ -1,0 +1,62 @@
+
+bat.png
+size: 253,59
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bianfu01
+  rotate: false
+  xy: 141, 23
+  size: 55, 36
+  orig: 55, 36
+  offset: 0, 0
+  index: -1
+bianfu02
+  rotate: false
+  xy: 141, 6
+  size: 17, 15
+  orig: 17, 15
+  offset: 0, 0
+  index: -1
+bianfu03
+  rotate: false
+  xy: 2, 2
+  size: 82, 57
+  orig: 82, 57
+  offset: 0, 0
+  index: -1
+bianfu04
+  rotate: false
+  xy: 243, 45
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
+bianfu05
+  rotate: false
+  xy: 86, 10
+  size: 53, 49
+  orig: 58, 49
+  offset: 0, 0
+  index: -1
+bianfu06
+  rotate: false
+  xy: 198, 29
+  size: 43, 30
+  orig: 43, 30
+  offset: 0, 0
+  index: -1
+bianfu07
+  rotate: false
+  xy: 86, 2
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+bianfu08
+  rotate: true
+  xy: 198, 24
+  size: 3, 6
+  orig: 3, 6
+  offset: 0, 0
+  index: -1

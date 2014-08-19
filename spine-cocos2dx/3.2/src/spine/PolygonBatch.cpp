@@ -46,7 +46,7 @@ PolygonBatch::PolygonBatch () :
 	_capacity(0),
 	_vertices(nullptr), _verticesCount(0),
 	_triangles(nullptr), _trianglesCount(0),
-	_texture(nullptr)
+	_texture(nullptr), _hasSetupVBOVAO(false)
 {}
 
 bool PolygonBatch::initWithCapacity (ssize_t capacity) {
@@ -90,29 +90,123 @@ void PolygonBatch::add (const Texture2D* addTexture,
 		vertex->texCoords.v = uvs[i + 1];
 	}
 }
+    
+void PolygonBatch::setupVBOAndVAO(){
+    if(_hasSetupVBOVAO)
+    {
+        return;
+    }
+    
+    glGenVertexArrays(1, &_spineVAO);
+    GL::bindVAO(_spineVAO);
+    
+    glGenBuffers(2, &_buffersVBO[0]);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _buffersVBO[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(V2F_C4B_T2F) * _capacity, _vertices, GL_DYNAMIC_DRAW);
+    
+    // vertices
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+    GLvoid* ptr = (GLvoid*)offsetof( V2F_C4B_T2F, vertices);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), ptr);
+    
+    // colors
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(V2F_C4B_T2F), (GLvoid*) offsetof( V2F_C4B_T2F, colors));
+    
+    // tex coords
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), (GLvoid*) offsetof( V2F_C4B_T2F, texCoords));
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffersVBO[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*_capacity * 3, _triangles, GL_STATIC_DRAW);
+    
+    // Must unbind the VAO before changing the element buffer.
+    GL::bindVAO(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    CHECK_GL_ERROR_DEBUG();
+    
+    _hasSetupVBOVAO = true;
+}
+    
 
 void PolygonBatch::flush () {
-	if (!_verticesCount) return;
+#if USE_VBO
+    flushVBO();
+#else
+    flushWithoutVBO();
+#endif
+}
+    
+void PolygonBatch::flushVBO() {
+    if (!_verticesCount) return;
+    
+     GL::bindTexture2D(_texture->getName());
+    
+    
+    if(!glIsBuffer(_buffersVBO[0]))
+    {
+        glGenBuffers(2, &_buffersVBO[0]);
+    }
+     
+     //Set VBO data
+     glBindBuffer(GL_ARRAY_BUFFER, _buffersVBO[0]);
+     glBufferData(GL_ARRAY_BUFFER, sizeof(V2F_C4B_T2F) * _verticesCount, _vertices, GL_DYNAMIC_DRAW);
+    
+    // vertices
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), (GLvoid*)offsetof( V2F_C4B_T2F, vertices));
+    
+    // colors
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(V2F_C4B_T2F), (GLvoid*) offsetof( V2F_C4B_T2F, colors));
+    
+    // tex coords
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), (GLvoid*) offsetof( V2F_C4B_T2F, texCoords));
+    
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffersVBO[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * _trianglesCount, _triangles, GL_DYNAMIC_DRAW);
 
-	GL::bindTexture2D(_texture->getName());
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORDS);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), &_vertices[0].vertices);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(V2F_C4B_T2F), &_vertices[0].colors);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORDS, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), &_vertices[0].texCoords);
+    glDrawElements(GL_TRIANGLES, _trianglesCount, GL_UNSIGNED_SHORT, (GLvoid*)0);
+    
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _verticesCount);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glDrawElements(GL_TRIANGLES, _trianglesCount, GL_UNSIGNED_SHORT, _triangles);
-
+    _verticesCount = 0;
+    _trianglesCount = 0;
+    
+    CHECK_GL_ERROR_DEBUG();
+}
+    
+void PolygonBatch::flushWithoutVBO() {
+    if (!_verticesCount) return;
+    
+    GL::bindTexture2D(_texture->getName());
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+    glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORDS);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), &_vertices[0].vertices);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(V2F_C4B_T2F), &_vertices[0].colors);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORDS, 2, GL_FLOAT, GL_FALSE, sizeof(V2F_C4B_T2F), &_vertices[0].texCoords);
+    
+    glDrawElements(GL_TRIANGLES, _trianglesCount, GL_UNSIGNED_SHORT, _triangles);
+    
 	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _verticesCount);
-
+    
 	_verticesCount = 0;
 	_trianglesCount = 0;
-
+    
 	CHECK_GL_ERROR_DEBUG();
 }
 
 
+#if CULLING
 //reset index if the sprite doesnt need to be drawed.
 void PolygonBatch::setVerticesTrianglesCount(int verticesCount, int trianglesCount) {
     _verticesCount = verticesCount;
@@ -126,4 +220,5 @@ int PolygonBatch::getVerticesCount() {
 int PolygonBatch::getTrianglesCount() {
     return _trianglesCount;
 }
+#endif
 }

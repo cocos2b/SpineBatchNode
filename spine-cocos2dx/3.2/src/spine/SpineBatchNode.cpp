@@ -34,18 +34,10 @@ void SpineBatchNode::drawBatchSkeleton (const Mat4 &transform, uint32_t transfor
     _batch->flush();
 }
 
-// override visit（copy from SpriteBatchNode）
+// override visit
 // don't call visit on it's children
 void SpineBatchNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
-    
-    // CAREFUL:
-    // This visit is almost identical to CocosNode#visit
-    // with the exception that it doesn't call visit on it's children
-    //
-    // The alternative is to have a void Sprite#visit, but
-    // although this is less maintainable, is faster
-    //
     if (! _visible)
     {
         return;

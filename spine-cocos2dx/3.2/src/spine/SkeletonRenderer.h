@@ -99,7 +99,7 @@ protected:
 	virtual ~SkeletonRenderer ();
 	void initialize ();
     
-    void convertToWorldCoordinates(int verticesCount);
+    void convertToWorldCoordinates(int verticesCount, cocos2d::Mat4 & transform);
     void drawSkeletonToBatch(PolygonBatch* batch);
 
 	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
@@ -119,6 +119,8 @@ protected:
 	float _timeScale;
 	bool _debugSlots;
 	bool _debugBones;
+    
+    bool isBatched;
     bool _insideBounds;                     /// whether or not the sprite was inside bounds the previous frame
 };
 

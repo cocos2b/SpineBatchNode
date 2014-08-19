@@ -49,9 +49,10 @@ Scene* SpineboyExample::scene () {
 bool SpineboyExample::init () {
 	if (!LayerColor::initWithColor(Color4B(128, 128, 128, 255))) return false;
 
-    SpineBatchNode *spineBatch = SpineBatchNode::create();
+    spineBatch = SpineBatchNode::create();
     
-	skeletonNode = SkeletonAnimation::createWithFile("spineboy.json", "spineboy.atlas", 0.6f);
+//	skeletonNode = SkeletonAnimation::createWithFile("spineboy.json", "spineboy.atlas", 0.6f);
+	skeletonNode = SkeletonAnimation::createWithFile("bat.json", "bat.atlas", 0.6f);
     
 
 	skeletonNode->setStartListener( [this] (int trackIndex) {
@@ -69,31 +70,33 @@ bool SpineboyExample::init () {
 		log("%d event: %s, %d, %f, %s", trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
 	});
 
-	skeletonNode->setMix("walk", "jump", 0.2f);
-	skeletonNode->setMix("jump", "run", 0.2f);
-	skeletonNode->setAnimation(0, "run", true);
-//	spTrackEntry* jumpEntry = skeletonNode->addAnimation(0, "jump", false, 3);
-	skeletonNode->addAnimation(0, "walk", true);
+//	skeletonNode->setMix("walk", "jump", 0.2f);
+//	skeletonNode->setMix("jump", "run", 0.2f);
+//	skeletonNode->setAnimation(0, "run", true);
+
+//	skeletonNode->addAnimation(0, "walk", true);
 
 //	skeletonNode->setTrackStartListener(jumpEntry, [] (int trackIndex) {
 //		log("jumped!");
 //	});
 
-	// skeletonNode->addAnimation(1, "test", true);
-	// skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), DelayTime::create(5), NULL)));
-
+    skeletonNode->setMix("idle", "stirke", 0.2f);
+    skeletonNode->setAnimation(0, "stirke", true);
+    skeletonNode->addAnimation(0, "idle", true);
+    
 	Size windowSize = Director::getInstance()->getWinSize();
 	skeletonNode->setPosition(Vec2(100, 30));
     skeletonNode->setScale(1.1);
-    spineBatch->setPosition(0, 0);
+    spineBatch->setPosition(70, 0);
 	addChild(spineBatch);
     spineBatch->addChild(skeletonNode);
 
 //    addChild(skeletonNode);
     
-#define MORE_NODE 76
+#define MORE_NODE 150
     for (int i=1; i<MORE_NODE; i++) {
-        createNode(this, i);
+        createNode(spineBatch, i);
+//        createNode(this, i);
     }
     
 	scheduleUpdate();
@@ -119,40 +122,51 @@ bool SpineboyExample::init () {
 //创建更多骨骼对象
 void SpineboyExample::createNode(Node *parent, int i) {
 
-    skeletonNode3 = SkeletonAnimation::createWithFile("spineboy.json", "spineboy.atlas", 0.6f);
+    skeletonNode3 = SkeletonAnimation::createWithFile("bat.json", "bat.atlas", 0.6f);
     
-	skeletonNode3->setStartListener( [this] (int trackIndex) {
-		spTrackEntry* entry = spAnimationState_getCurrent(skeletonNode3->getState(), trackIndex);
-		const char* animationName = (entry && entry->animation) ? entry->animation->name : 0;
-		log("%d start: %s", trackIndex, animationName);
-	});
-	skeletonNode3->setEndListener( [] (int trackIndex) {
-		log("%d end", trackIndex);
-	});
-	skeletonNode3->setCompleteListener( [] (int trackIndex, int loopCount) {
-		log("%d complete: %d", trackIndex, loopCount);
-	});
-	skeletonNode3->setEventListener( [] (int trackIndex, spEvent* event) {
-		log("%d event: %s, %d, %f, %s", trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
-	});
+//	skeletonNode3->setStartListener( [this] (int trackIndex) {
+//		spTrackEntry* entry = spAnimationState_getCurrent(skeletonNode3->getState(), trackIndex);
+//		const char* animationName = (entry && entry->animation) ? entry->animation->name : 0;
+//		log("%d start: %s", trackIndex, animationName);
+//	});
+//	skeletonNode3->setEndListener( [] (int trackIndex) {
+//		log("%d end", trackIndex);
+//	});
+//	skeletonNode3->setCompleteListener( [] (int trackIndex, int loopCount) {
+//		log("%d complete: %d", trackIndex, loopCount);
+//	});
+//	skeletonNode3->setEventListener( [] (int trackIndex, spEvent* event) {
+//		log("%d event: %s, %d, %f, %s", trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
+//	});
     
-	skeletonNode3->setMix("run", "jump", 0.2f);
-	skeletonNode3->setMix("jump", "run", 0.2f);
-	skeletonNode3->setAnimation(0, "walk", true);
-	spTrackEntry* jumpEntry = skeletonNode3->addAnimation(0, "jump", false, 2*i);
-	skeletonNode3->addAnimation(0.2*i, "run", true);
+//	skeletonNode3->setMix("run", "jump", 0.2f);
+//	skeletonNode3->setMix("jump", "run", 0.2f);
+//	skeletonNode3->setAnimation(0, "walk", true);
+//	spTrackEntry* jumpEntry = skeletonNode3->addAnimation(0, "jump", false, 2*i);
+//	skeletonNode3->addAnimation(0.2*i, "run", true);
+//    
+//	skeletonNode3->setTrackStartListener(jumpEntry, [] (int trackIndex) {
+//		log("jumped!");
+//	});
+    
+    skeletonNode3->setMix("idle", "stirke", 0.2f);
+	skeletonNode3->setAnimation(0, "idle", true);
+	spTrackEntry* jumpEntry = skeletonNode3->addAnimation(0, "stirke", false, 2*i);
+	skeletonNode3->addAnimation(0.2*i, "idle", true);
     
 	skeletonNode3->setTrackStartListener(jumpEntry, [] (int trackIndex) {
 		log("jumped!");
 	});
+
     
 	// skeletonNode->addAnimation(1, "test", true);
 	// skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), DelayTime::create(5), NULL)));
     
 	Size windowSize = Director::getInstance()->getWinSize();
 
-	skeletonNode3->setPosition(Vec2(100 + 40*(i%17), 10*(i%5) + 40));
-    skeletonNode3->setScale(-0.001*i + 1);
+	skeletonNode3->setPosition(Vec2(0 + 43*(i%17), 56*(i%5) + 70));
+//	skeletonNode3->setPosition(Vec2(50 + 23*(i%17), 26*(i%7) + 70));
+//    skeletonNode3->setScale(-0.001*i + 1);
 	parent->addChild(skeletonNode3);
 }
 
@@ -178,24 +192,31 @@ void SpineboyExample::createNode2(Node *parent, int i) {
 	skeletonNode4->setMix("run", "jump", 0.2f);
 	skeletonNode4->setMix("jump", "run", 0.2f);
 	skeletonNode4->setAnimation(0, "walk", true);
-	spTrackEntry* jumpEntry = skeletonNode4->addAnimation(0, "jump", false, 2*2);
+	skeletonNode4->addAnimation(0, "jump", false, 2*2);
 	skeletonNode4->addAnimation(0.2*2, "run", true);
     
-	skeletonNode4->setTrackStartListener(jumpEntry, [] (int trackIndex) {
-		log("jumped!");
-	});
+//	skeletonNode4->setTrackStartListener(jumpEntry, [] (int trackIndex) {
+//		log("jumped!");
+//	});
     
 	// skeletonNode->addAnimation(1, "test", true);
 	// skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), DelayTime::create(5), NULL)));
     
 	Size windowSize = Director::getInstance()->getWinSize();
-    //这里设置position没用
-	skeletonNode4->setPosition(Vec2(540 + 40*i, 40*i + 120));
+	skeletonNode4->setPosition(Vec2(540 + 40*i, 40*i + 150));
 	parent->addChild(skeletonNode4);
 }
 
 void SpineboyExample::update (float deltaTime) {
 	// Test releasing memory.
 	// Director::getInstance()->replaceScene(SpineboyExample::scene());
+//    Vector<Node *> childrend = spineBatch->getChildren();
+//    if(childrend.size() > 1000000000) {
+//        for (auto child : childrend) {
+//            log("remove child!!");
+//            child->removeFromParentAndCleanup(true);
+//            break;
+//        }
+//    }
 }
 

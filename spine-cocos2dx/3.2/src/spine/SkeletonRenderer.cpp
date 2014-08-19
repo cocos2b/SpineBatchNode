@@ -65,17 +65,19 @@ void SkeletonRenderer::initialize () {
 	_debugSlots = false;
 	_debugBones = false;
 	_timeScale = 1;
+    
+    isBatched = false;
 
 	_worldVertices = MALLOC(float, 1000); // Max number of vertices per mesh.
 
-	_batch = PolygonBatch::createWithCapacity(7000); // Max number of vertices and triangles per batch.
+	_batch = PolygonBatch::createWithCapacity(10000); // Max number of vertices and triangles per batch.
 	_batch->retain();
 
 	_blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 	setOpacityModifyRGB(true);
 
-	setGLProgram(ShaderCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR));
-//    setGLProgram(ShaderCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP));
+//	setGLProgram(ShaderCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR));
+    setGLProgram(ShaderCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP));
 	scheduleUpdate();
 }
 
@@ -143,6 +145,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 //for batching multi sprite, call by SpineBatchNode.
 //should make batchDrawSkeleton private and SpineBatchNode as friend?
 void SkeletonRenderer::batchDrawSkeleton(PolygonBatch* batch) {
+    isBatched = true;
     drawSkeletonToBatch(batch);
 }
     
@@ -154,7 +157,6 @@ void SkeletonRenderer::drawSkeleton (const Mat4 &transform, uint32_t transformFl
     this->drawSkeletonToBatch(_batch);
     _batch->flush();
     
-    if(_batch) return;
     
     if (_debugSlots || _debugBones) {
         Director* director = Director::getInstance();
@@ -203,10 +205,13 @@ void SkeletonRenderer::drawSkeleton (const Mat4 &transform, uint32_t transformFl
 }
     
 void SkeletonRenderer::drawSkeletonToBatch(PolygonBatch* batch) {
+#if CULLING
    //for culling
     _insideBounds = false;
     int orgVeticesCount = batch->getVerticesCount();
     int orgTrianglesCount = batch->getTrianglesCount();
+#endif
+    Mat4 transform = getNodeToWorldTransform();
     
     Color3B nodeColor = getColor();
 	_skeleton->r = nodeColor.r / (float)255;
@@ -282,31 +287,36 @@ void SkeletonRenderer::drawSkeletonToBatch(PolygonBatch* batch) {
 			color.g = _skeleton->g * slot->g * g * multiplier;
 			color.b = _skeleton->b * slot->b * b * multiplier;
             
-            convertToWorldCoordinates(verticesCount);
+            convertToWorldCoordinates(verticesCount, transform);
 			batch->add(texture, _worldVertices, uvs, verticesCount, triangles, trianglesCount, &color);
 		}
 	}
+#if CULLING
     if (!_insideBounds) {
         batch->setVerticesTrianglesCount(orgVeticesCount, orgTrianglesCount);
     }
+#endif
 }
 
 //convert all vetices to world Coordinates
-void SkeletonRenderer::convertToWorldCoordinates(int verticesCount) {
-    Size screen_size = Director::getInstance()->getWinSize();
-    for (int i = 0; i < verticesCount; i += 2, ++verticesCount) {
-        Vec2 vetex(_worldVertices[i], _worldVertices[i + 1]);
-        vetex = convertToWorldSpace(vetex);
-        _worldVertices[i] = vetex.x;
-        _worldVertices[i + 1] = vetex.y;
-        
-        if (!_insideBounds) {
-            _insideBounds = (_worldVertices[i] > 0 && _worldVertices[i] < screen_size.width
-                             && _worldVertices[i + 1] > 0 && _worldVertices[i + 1] < screen_size.height);
+   
+    void SkeletonRenderer::convertToWorldCoordinates(int verticesCount, Mat4 & transform) {
+        Size screen_size = Director::getInstance()->getWinSize();
+        for (int i = 0; i < verticesCount; i += 2, ++verticesCount) {
+            float x = _worldVertices[i];
+            float y = _worldVertices[i + 1];
+            
+            _worldVertices[i] = x * (transform.m)[0] + y * (transform.m)[4] +  (transform.m)[12];
+            _worldVertices[i + 1] = x * (transform.m)[1] + y * (transform.m)[5] +  (transform.m)[13];
+#if CULLING
+            if (!_insideBounds) {
+                _insideBounds = (_worldVertices[i] > 0 && _worldVertices[i] < screen_size.width
+                                 && _worldVertices[i + 1] > 0 && _worldVertices[i + 1] < screen_size.height);
+            }
+#endif
         }
     }
-}
-    
+
 Texture2D* SkeletonRenderer::getTexture (spRegionAttachment* attachment) const {
 	return (Texture2D*)((spAtlasRegion*)attachment->rendererObject)->page->rendererObject;
 }

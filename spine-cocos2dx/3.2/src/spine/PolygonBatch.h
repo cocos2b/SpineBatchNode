@@ -34,6 +34,9 @@
 #include "cocos2d.h"
 
 namespace spine {
+    
+#define CULLING 0
+#define USE_VBO 1
 
 class PolygonBatch : public cocos2d::Ref {
 public:
@@ -43,17 +46,24 @@ public:
 		const float* vertices, const float* uvs, int verticesCount,
 		const int* triangles, int trianglesCount,
 		cocos2d::Color4B* color);
-	void flush ();
+	void flush();
 
+#if CULLING
     // for auto culling
     void setVerticesTrianglesCount(int verticesCount, int trianglesCount);
     int getVerticesCount();
     int getTrianglesCount();
+#endif
+    
+    void setupVBOAndVAO();
 
 protected:
 	PolygonBatch();
 	virtual ~PolygonBatch();
 	bool initWithCapacity (ssize_t capacity);
+    
+    void flushVBO();
+    void flushWithoutVBO();
 
 	ssize_t _capacity;
 	cocos2d::V2F_C4B_T2F* _vertices;
@@ -61,6 +71,11 @@ protected:
 	GLushort* _triangles;
 	int _trianglesCount;
 	const cocos2d::Texture2D* _texture;
+    
+    GLuint _spineVAO;
+    GLuint _buffersVBO[2]; //0: vertex  1: indices
+    
+    bool _hasSetupVBOVAO;
 };
 
 }
