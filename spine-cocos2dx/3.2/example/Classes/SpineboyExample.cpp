@@ -50,7 +50,7 @@ bool SpineboyExample::init () {
 	if (!LayerColor::initWithColor(Color4B(128, 128, 128, 255))) return false;
     
 #define NODE_COUNT 150
-#define USE_BATCH 0
+#define USE_BATCH 1
     
 #if USE_BATCH
     spineBatch = SpineBatchNode::create();
@@ -58,7 +58,7 @@ bool SpineboyExample::init () {
 	addChild(spineBatch);
 #endif
     
-    for (int i=1; i<NODE_COUNT; i++) {
+    for (int i = 1; i <= NODE_COUNT; i ++) {
 #if USE_BATCH
         createNode(spineBatch, i);
 #else
