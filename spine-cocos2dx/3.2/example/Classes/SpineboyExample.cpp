@@ -49,8 +49,8 @@ Scene* SpineboyExample::scene () {
 bool SpineboyExample::init () {
 	if (!LayerColor::initWithColor(Color4B(128, 128, 128, 255))) return false;
     
-#define NODE_COUNT 150
-#define USE_BATCH 1
+#define NODE_COUNT 700
+#define USE_BATCH 0
     
 #if USE_BATCH
     spineBatch = SpineBatchNode::create();
@@ -60,11 +60,11 @@ bool SpineboyExample::init () {
     
     for (int i = 1; i <= NODE_COUNT; i ++) {
 #if USE_BATCH
-        createNode(spineBatch, i);
+        createBatNode(spineBatch, i);
 #else
-        createNode(this, i);
+        createBatNode(this, i);
 #endif
-    }
+}
     
 	scheduleUpdate();
 
@@ -72,16 +72,24 @@ bool SpineboyExample::init () {
 }
 
 //创建更多骨骼对象
-void SpineboyExample::createNode(Node *parent, int i) {
+void SpineboyExample::createBatNode(Node *parent, int i) {
 
     skeletonNode = SkeletonAnimation::createWithFile("bat.json", "bat.atlas", 0.6f);
     
-    skeletonNode->setMix("idle", "stirke", 0.2f);
-	skeletonNode->setAnimation(0, "idle", true);
-	skeletonNode->addAnimation(0, "stirke", false, 2*i);
-	skeletonNode->addAnimation(0.2*i, "idle", true);
+//    skeletonNode->setMix("idle", "stirke", 0.2f);
+	skeletonNode->setAnimation(0, "idle", false);
+//	skeletonNode->addAnimation(0, "stirke", true, 2000*i);
+//	skeletonNode->addAnimation(0, "stirke", true);
     
-	skeletonNode->setPosition(Vec2(70 + 45*(i%17), 60*(i%8) + 70));
+	skeletonNode->setPosition(Vec2(100 + 45*(i%17), 60*(i%8) + 80));
+	parent->addChild(skeletonNode);
+}
+
+void SpineboyExample::createSpineBoyNode(Node *parent, int i) {
+    skeletonNode = SkeletonAnimation::createWithFile("spineboy.json", "spineboy.atlas", 0.6f);
+    skeletonNode->setAnimation(0, "walk", false);
+    
+    skeletonNode->setPosition(Vec2(100 + 45*(i%17), 40*(i%6) + 20));
 	parent->addChild(skeletonNode);
 }
 

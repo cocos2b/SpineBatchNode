@@ -120,7 +120,6 @@ protected:
 	bool _debugSlots;
 	bool _debugBones;
     
-    bool isBatched;
     bool _insideBounds;                     /// whether or not the sprite was inside bounds the previous frame
 };
 

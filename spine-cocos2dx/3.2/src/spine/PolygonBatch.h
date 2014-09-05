@@ -36,7 +36,8 @@
 namespace spine {
     
 #define CULLING 0
-#define USE_VBO 1
+#define USE_VBO 0
+#define USE_VAO 0
 
 class PolygonBatch : public cocos2d::Ref {
 public:
@@ -64,6 +65,7 @@ protected:
     
     void flushVBO();
     void flushWithoutVBO();
+    bool useVAO();
 
 	ssize_t _capacity;
 	cocos2d::V2F_C4B_T2F* _vertices;

@@ -12,7 +12,6 @@
 		160702CD198E45970089E1A4 /* libchipmunk iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 160702C3198E0F470089E1A4 /* libchipmunk iOS.a */; };
 		160702CE198E45970089E1A4 /* libcocos2dx-extensions iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 160702C1198E0F470089E1A4 /* libcocos2dx-extensions iOS.a */; };
 		160702CF198E45970089E1A4 /* libCocosDenshion iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 160702C7198E0F470089E1A4 /* libCocosDenshion iOS.a */; };
-		160702DC198F71170089E1A4 /* SpineBatchNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 160702DA198F71170089E1A4 /* SpineBatchNode.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
@@ -125,6 +124,7 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
+		CE5A84A619B4487900D2DD6D /* SpineBatchNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5A84A419B4487900D2DD6D /* SpineBatchNode.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -241,8 +241,6 @@
 
 /* Begin PBXFileReference section */
 		160702A5198E0F470089E1A4 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../../cocos2dx/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
-		160702DA198F71170089E1A4 /* SpineBatchNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpineBatchNode.cpp; sourceTree = "<group>"; };
-		160702DB198F71170089E1A4 /* SpineBatchNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineBatchNode.h; sourceTree = "<group>"; };
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Spine iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spine iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -353,6 +351,8 @@
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CE5A84A419B4487900D2DD6D /* SpineBatchNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpineBatchNode.cpp; sourceTree = "<group>"; };
+		CE5A84A519B4487900D2DD6D /* SpineBatchNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineBatchNode.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -545,6 +545,8 @@
 		508F8533198ACF26003F3377 /* spine-cocos2dx */ = {
 			isa = PBXGroup;
 			children = (
+				CE5A84A419B4487900D2DD6D /* SpineBatchNode.cpp */,
+				CE5A84A519B4487900D2DD6D /* SpineBatchNode.h */,
 				508F8534198ACF26003F3377 /* PolygonBatch.cpp */,
 				508F8535198ACF26003F3377 /* PolygonBatch.h */,
 				508F8536198ACF26003F3377 /* SkeletonAnimation.cpp */,
@@ -553,8 +555,6 @@
 				508F8539198ACF26003F3377 /* SkeletonRenderer.h */,
 				508F853A198ACF26003F3377 /* spine-cocos2dx.cpp */,
 				508F853B198ACF26003F3377 /* spine-cocos2dx.h */,
-				160702DA198F71170089E1A4 /* SpineBatchNode.cpp */,
-				160702DB198F71170089E1A4 /* SpineBatchNode.h */,
 			);
 			name = "spine-cocos2dx";
 			path = ../../src/spine;
@@ -871,7 +871,7 @@
 				508F85FF198AD01D003F3377 /* extension.c in Sources */,
 				508F8615198AD01D003F3377 /* SlotData.c in Sources */,
 				508F85FD198AD01D003F3377 /* EventData.c in Sources */,
-				160702DC198F71170089E1A4 /* SpineBatchNode.cpp in Sources */,
+				CE5A84A619B4487900D2DD6D /* SpineBatchNode.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				508F85F7198AD01D003F3377 /* BoneData.c in Sources */,
 				508F853E198ACF26003F3377 /* SkeletonAnimation.cpp in Sources */,

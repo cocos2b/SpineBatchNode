@@ -46,7 +46,8 @@ private:
     spine::SkeletonAnimation* skeletonNode;
     spine::SpineBatchNode *spineBatch;
     
-    void createNode(cocos2d::Node *parent, int i);
+    void createBatNode(cocos2d::Node *parent, int i);
+    void createSpineBoyNode(cocos2d::Node *parent, int i);    
 };
 
 #endif // _SPINEBOYEXAMPLE_H_

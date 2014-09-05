@@ -65,8 +65,6 @@ void SkeletonRenderer::initialize () {
 	_debugSlots = false;
 	_debugBones = false;
 	_timeScale = 1;
-    
-    isBatched = false;
 
 	_worldVertices = MALLOC(float, 1000); // Max number of vertices per mesh.
 
@@ -145,7 +143,6 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 //for batching multi sprite, call by SpineBatchNode.
 //should make batchDrawSkeleton private and SpineBatchNode as friend?
 void SkeletonRenderer::batchDrawSkeleton(PolygonBatch* batch) {
-    isBatched = true;
     drawSkeletonToBatch(batch);
 }
     

@@ -25,6 +25,12 @@ void SpineBatchNode::draw (Renderer* renderer, const Mat4& transform, uint32_t t
 // draw all children to batch. Recursive iteration not support yet.
 void SpineBatchNode::drawBatchSkeleton (const Mat4 &transform, uint32_t transformFlags) {
     getGLProgramState()->apply(transform);
+    
+    if (Configuration::getInstance()->supportsShareableVAO())
+    {
+        _batch->setupVBOAndVAO();
+    }
+    
     for (auto child : _children) {
         SkeletonAnimation *skeletonNode = static_cast<SkeletonAnimation*>(child);
         if (skeletonNode) {
