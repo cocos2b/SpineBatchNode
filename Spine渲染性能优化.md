@@ -16,9 +16,10 @@ Renderer类只实现了对“QUAD_COMMAND”这个类型的渲染command做batch
 ### 性能测试（iOS）
 * 修改`SpineboyExample.cpp`的`USE_BATCH`，1为使用batch，0为不batch
 * 修改`PolygonBatch.h`的`USE_VBO`，1为使用vbo，0为不使用vbo
-#### 原来没有batch和vbo性能
+
+* 原来没有batch和vbo性能
 使用iPhone5s，700个Node，fps=33
-#### 使用batch和vbo性能
+* 使用batch和vbo性能
 使用iPhone5s，700个Node，fps=52
 
 可以提升50%+的`渲染`效率。
